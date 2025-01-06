@@ -4,6 +4,7 @@ defmodule WorkReport.Parser do
     parse_hours(time_str) * 60 + parse_minutes(time_str)
   end
 
+  @spec parse_time(String.t()) :: integer()
   defp parse_hours(time_str) do
     hours_str =
       Regex.scan(~r/\d*h/, time_str)
@@ -24,6 +25,7 @@ defmodule WorkReport.Parser do
     end
   end
 
+  @spec parse_time(String.t()) :: integer()
   defp parse_minutes(time_str) do
     minutes_str =
       Regex.scan(~r/\d*m/, time_str)

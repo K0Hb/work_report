@@ -1,5 +1,5 @@
 defmodule WorkReport.Formatter do
-  @spec format_time(integer) :: String.t()
+  @spec format_time(integer | float) :: String.t()
   def format_time(time) do
     hours =
       (time / 60)

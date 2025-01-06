@@ -1,16 +1,18 @@
 defmodule WorkReport.Reporter do
+  @spec build({integer(), integer()}, String.t()) :: {:ok, String.t()} | {:error, String.t()}
   def build({month_number, day_number}, file_path) do
     with {:ok, raw_string} <- File.read(file_path),
          {:ok, report_stuct} <- WorkReport.ReportStruct.build(raw_string),
-         {:ok, month } <- find_month(report_stuct, month_number),
-         {:ok, day } <- find_day(month.days, day_number) do
+         {:ok, month} <- find_month(report_stuct, month_number),
+         {:ok, day} <- find_day(month.days, day_number) do
       WorkReport.Presenter.call(day, month)
     else
       {:error, error} -> error
     end
   end
 
-  def month_name(month_number) do
+  @spec month_name(integer()) :: String.t()
+  defp month_name(month_number) do
     months = %{
       1 => "January",
       2 => "February",
@@ -29,6 +31,8 @@ defmodule WorkReport.Reporter do
     months[month_number]
   end
 
+  @spec find_month([%WorkReport.Models.Month{}], integer()) ::
+          {:ok, %WorkReport.Models.Month{}} | {:error, String.t()}
   defp find_month(report_stuct, month_number) do
     case Enum.find(report_stuct, fn month -> month.name == month_name(month_number) end) do
       month = %WorkReport.Models.Month{} -> {:ok, month}
@@ -36,6 +40,8 @@ defmodule WorkReport.Reporter do
     end
   end
 
+  @spec find_month([%WorkReport.Models.Day{}], integer()) ::
+          {:ok, %WorkReport.Models.Day{}} | {:error, String.t()}
   defp find_day(month_days, day_number) do
     case Enum.find(month_days, fn day -> day.number == day_number end) do
       day = %WorkReport.Models.Day{} -> {:ok, day}

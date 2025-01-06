@@ -1,4 +1,5 @@
 defmodule WorkReport.ReportStruct do
+  @spec build(String.t()) :: {:ok, [%WorkReport.Models.Month{}]} | {:error, String.t()}
   def build(raw_string) do
     try do
       report_struct =
@@ -43,8 +44,7 @@ defmodule WorkReport.ReportStruct do
     name =
       Regex.run(~r/].*-/, text)
       |> List.first()
-      |> String.replace("]", "")
-      |> String.slice(0..-2//1)
+      |> String.slice(1..-2//1)
       |> String.trim()
 
     time =
